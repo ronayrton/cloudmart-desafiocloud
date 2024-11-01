@@ -1,0 +1,33 @@
+
+## Instalar o Docker na EC2
+sudo yum update -y
+sudo yum install docker -y
+sudo systemctl start docker
+sudo docker run hello-world
+sudo systemctl enable docker
+docker --version
+sudo usermod -a -G docker $(whoami)
+newgrp docker
+
+
+
+## Configurar regras de firewall
+Abra as seguintes portas no grupo de segurança da EC2:
+
+1. Porta 5000 (para o backend)
+2. Porta 5001 (para o frontend)
+
+Agora você pode acessar o CloudMart remotamente usando o IP público da sua instância EC2.
+
+
+## Crie um EKS Cluster
+eksctl create cluster \
+  --name cloudmart \
+  --region us-east-1 \
+  --nodegroup-name standard-workers \
+  --node-type t3.medium \
+  --nodes 1 \
+  --with-oidc \
+  --managed
+
+  
